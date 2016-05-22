@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/satori/go.uuid"
 )
 
 func init() {
@@ -33,6 +35,8 @@ func main() {
 
 	log.Printf("Loading Frontend %+v\n", server.Frontend)
 	serverHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		r.Header.Set("X-Request-ID", uuid.NewV4().String())
+
 		for _, route := range server.Frontend.Routes {
 			if strings.HasPrefix(r.URL.Path, route.Prefix) {
 				backendHandlers[route.Backend].ServeHTTP(w, r)

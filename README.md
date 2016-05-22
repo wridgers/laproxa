@@ -1,6 +1,8 @@
 # Proxa
 
-Proxa is a simple HTTP reverse proxy. It is still in development and should not be used in production, but it is a useful tool for development.
+Proxa is a configurable HTTP reverse proxy.
+
+It is still in development and should not be used in production.
 
 ## Install
 
