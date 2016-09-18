@@ -17,7 +17,7 @@ func init() {
 
 func main() {
 	var configFilePath string
-	flag.StringVar(&configFilePath, "config", "./proxa.json", "path to config file")
+	flag.StringVar(&configFilePath, "config", "./proxa.toml", "path to config file")
 	flag.Parse()
 
 	server, err := loadServerConfiguration(configFilePath)
@@ -33,11 +33,10 @@ func main() {
 		addBackendHandler(backendHandlers, backend)
 	}
 
-	log.Printf("Loading Frontend %+v\n", server.Frontend)
 	serverHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.Header.Set("X-Request-ID", uuid.NewV4().String())
 
-		for _, route := range server.Frontend.Routes {
+		for _, route := range server.Routes {
 			if strings.HasPrefix(r.URL.Path, route.Prefix) {
 				backendHandlers[route.Backend].ServeHTTP(w, r)
 				return
@@ -47,6 +46,10 @@ func main() {
 		http.NotFound(w, r)
 	})
 
-	log.Printf("Starting Frontend %+v\n", server.Frontend)
-	http.ListenAndServe(server.Frontend.Bind, logMiddleware(serverHandler))
+	log.Printf("Starting Serer %+v\n", server)
+	err = http.ListenAndServe(server.Bind, logMiddleware(serverHandler))
+
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 }

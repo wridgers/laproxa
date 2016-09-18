@@ -1,0 +1,22 @@
+
+bind = "0.0.0.0:8080"
+
+################################################################################
+
+[[routes]]
+prefix = "/api"
+backend = "api"
+
+[[routes]]
+prefix = "/"
+backend = "default"
+
+################################################################################
+
+[[backends]]
+name = "default"
+addrs = ["localhost:8081"]
+
+[[backends]]
+name = "api"
+addrs = ["localhost:9001"]

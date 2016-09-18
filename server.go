@@ -1,25 +1,24 @@
 package main
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"github.com/BurntSushi/toml"
 )
 
 type serverConfiguration struct {
-	Frontend frontendConfiguration  `json:"frontend"`
-	Backends []backendConfiguration `json:"backends"`
+	Bind     string
+	Routes   []route
+	Backends []backend
 }
 
-func loadServerConfiguration(configFilePath string) (serverConfiguration, error) {
+type route struct {
+	Prefix  string
+	Backend string
+}
+
+func loadServerConfiguration(path string) (serverConfiguration, error) {
 	var conf serverConfiguration
 
-	configData, err := ioutil.ReadFile(configFilePath)
-
-	if err != nil {
-		return conf, err
-	}
-
-	err = json.Unmarshal(configData, &conf)
+	_, err := toml.DecodeFile(path, &conf)
 
 	if err != nil {
 		return conf, err

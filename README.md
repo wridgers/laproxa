@@ -8,27 +8,36 @@ It is still in development and should not be used in production.
 
     $ go get github.com/wridgers/proxa
 
-## Example configuration
+## Usage ##
 
-```json
-{
-  "frontend": {
-    "bind": ":8080",
-    "routes": [
-      {"prefix": "/api/", "backend": "api"},
-      {"prefix": "/", "backend": "default"}
-    ]
-  },
+The default configuration path is `./proxa.toml`.
 
-  "backends": [
-    {
-      "name":  "default",
-      "addrs": ["localhost:8081", "localhost:8082"]
-    },
-    {
-      "name": "api",
-      "addrs": ["localhost:8090"]
-    }
-  ]
-}
+    $ proxa -config /path/to/configuration.toml
+
+## Configuration
+
+Proxa is configured with a simple [TOML](https://github.com/toml-lang/toml) file.
+
+```toml
+bind = ":8080"
+
+################################################################################
+
+[[routes]]
+prefix = "/api"
+backend = "api"
+
+[[routes]]
+prefix = "/"
+backend = "default"
+
+################################################################################
+
+[[backends]]
+name = "default"
+addrs = ["localhost:8001"]
+
+[[backends]]
+name = "api"
+addrs = ["localhost:9001", "localhost:9002"]
 ```

@@ -6,12 +6,12 @@ import (
 	"net/url"
 )
 
-type backendConfiguration struct {
-	Name  string   `json:"name"`
-	Addrs []string `json:"addrs"`
+type backend struct {
+	Name  string
+	Addrs []string
 }
 
-func addBackendHandler(m map[string]http.Handler, b backendConfiguration) {
+func addBackendHandler(m map[string]http.Handler, b backend) {
 	var handlers []http.Handler
 
 	for _, addr := range b.Addrs {
